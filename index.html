@@ -3,16 +3,30 @@
 
 <head>
     <title>p5js Template</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>
-    <script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.13/p5.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.1/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js">
+    </script>
+    <script <script>
+        let radio;
+
         function setup() {
             createCanvas(800, 600);
             rectMode(CENTER);
-            textAlign(CENTER,CENTER);
-            strokeWeight(1);
-            textSize(30);
+            textAlign(CENTER, CENTER);
+            strokeWeight(5);
+            background(0, 0, 0);
+            radio = createRadio();
+            radio.option(' 5 sec', 300);
+            radio.option(' 4 sec', 240);
+            radio.option(' 3 sec', 180);
+            radio.option(' 2 sec', 120);
+            radio.style('width','60px');
+            radio.style('color','White');
+            radio.position(width-100, 100);
+            radio.value(300);
         }
-        let flag = false;
+        var interval;
         let algs = [];
 
         function preload() {
@@ -26,6 +40,7 @@
             algs.push(loadImage('algs/alg8.png'));
             algs.push(loadImage('algs/alg9.png'));
             algs.push(loadImage('algs/alg10.png'));
+            algs.push(loadImage('algs/alg11.png'));
             algs.push(loadImage('algs/alg12.png'));
             algs.push(loadImage('algs/alg13.png'));
             algs.push(loadImage('algs/alg14.png'));
@@ -62,20 +77,21 @@
         let hover = false;
         let On = false;
         let indexes = 0;
+        let bText = "Start";
 
         function rotation(notation) {
             if (notation == 1) { //u
-                translate(220, 0);
+                translate(230, 0);
                 rotate(PI / 2);
 
             }
             else if (notation == 2) { //u2
-                translate(220, 220);
+                translate(230, 230);
                 rotate(PI);
 
             }
             else if (notation == 3) { //u'
-                translate(0, 220);
+                translate(0, 230);
                 rotate(-PI / 2);
 
             }
@@ -83,18 +99,19 @@
 
         function randomAlg() {
 
-            if (frameCount % 240 == 0 && indexes<algs.length && On == true) {
+            if (frameCount % interval == 0 && indexes < algs.length && On == true) {
                 background(0, 0, 0);
                 let rAuf = floor(random(0, 4)) + 1;
 
                 rotation(rAuf);
-                image(algs[indexes], -40, -40, 300, 300);
+                image(algs[indexes], -35, -35, 300, 300);
                 indexes++;
             }
 
         }
+
         function randomize() {
-            for (var i=temp.length-1; i>=0; i--) {
+            for (var i = temp.length - 1; i >= 0; i--) {
                 let rAlg = floor(random(0, temp.length));
                 algs[i] = temp[rAlg];
                 temp.splice(rAlg, 1);
@@ -105,13 +122,18 @@
             if (hover && !On) {
                 On = true;
                 indexes = 0;
+                bText = "Stop";
+                temp = [];
                 for (var i = 0; i < algs.length; i++) {
                     temp.push(algs[i]);
                 }
+                console.log(temp.length);
                 randomize()
+
             }
             else {
                 On = false;
+                bText = "Start";
             }
 
             console.log(On);
@@ -119,21 +141,36 @@
         }
 
         function button(x, y, s) {
+            fill(255, 255, 255);
             rect(x, y, s, s);
+
             if (mouseX > x - s / 2 && mouseX < x + s / 2 && mouseY > y - s / 2 && mouseY < y + s / 2) {
                 hover = true;
             }
             else {
                 hover = false;
             }
+            textSize(30);
+            text(indexes, width - 50, 50);
 
-            text(indexes,width-50,50);
+            textSize(20);
+            if (bText == "Start") {
+                fill(0, 255, 0);
+                text(bText, x, y);
+            }
+            else {
+                fill(255, 0, 0);
+                text(bText, x, y);
+            }
+
         }
 
 
         function draw() {
             randomAlg();
             button(width - 100, 50, 50);
+            console.log(interval);
+            interval = radio.value();
         }
     </script>
 </head>
