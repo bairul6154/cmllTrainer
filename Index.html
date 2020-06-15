@@ -7,63 +7,138 @@
     <script>
         function setup() {
             createCanvas(800, 600);
+            rectMode(CENTER);
+            textAlign(CENTER,CENTER);
+            strokeWeight(1);
+            textSize(30);
         }
         let flag = false;
         let algs = [];
 
         function preload() {
-            algs.push(loadImage('images/alg1.png'));
-            algs.push(loadImage('images/alg2.png'));
+            algs.push(loadImage('algs/alg1.png'));
+            algs.push(loadImage('algs/alg2.png'));
+            algs.push(loadImage('algs/alg3.png'));
+            algs.push(loadImage('algs/alg4.png'));
+            algs.push(loadImage('algs/alg5.png'));
+            algs.push(loadImage('algs/alg6.png'));
+            algs.push(loadImage('algs/alg7.png'));
+            algs.push(loadImage('algs/alg8.png'));
+            algs.push(loadImage('algs/alg9.png'));
+            algs.push(loadImage('algs/alg10.png'));
+            algs.push(loadImage('algs/alg12.png'));
+            algs.push(loadImage('algs/alg13.png'));
+            algs.push(loadImage('algs/alg14.png'));
+            algs.push(loadImage('algs/alg15.png'));
+            algs.push(loadImage('algs/alg16.png'));
+            algs.push(loadImage('algs/alg17.png'));
+            algs.push(loadImage('algs/alg18.png'));
+            algs.push(loadImage('algs/alg19.png'));
+            algs.push(loadImage('algs/alg20.png'));
+            algs.push(loadImage('algs/alg21.png'));
+            algs.push(loadImage('algs/alg22.png'));
+            algs.push(loadImage('algs/alg23.png'));
+            algs.push(loadImage('algs/alg24.png'));
+            algs.push(loadImage('algs/alg25.png'));
+            algs.push(loadImage('algs/alg26.png'));
+            algs.push(loadImage('algs/alg27.png'));
+            algs.push(loadImage('algs/alg28.png'));
+            algs.push(loadImage('algs/alg29.png'));
+            algs.push(loadImage('algs/alg30.png'));
+            algs.push(loadImage('algs/alg31.png'));
+            algs.push(loadImage('algs/alg32.png'));
+            algs.push(loadImage('algs/alg33.png'));
+            algs.push(loadImage('algs/alg34.png'));
+            algs.push(loadImage('algs/alg35.png'));
+            algs.push(loadImage('algs/alg36.png'));
+            algs.push(loadImage('algs/alg37.png'));
+            algs.push(loadImage('algs/alg38.png'));
+            algs.push(loadImage('algs/alg39.png'));
+            algs.push(loadImage('algs/alg40.png'));
+            algs.push(loadImage('algs/alg41.png'));
+            algs.push(loadImage('algs/alg42.png'));
         }
+        let temp = [];
+        let hover = false;
+        let On = false;
+        let indexes = 0;
 
         function rotation(notation) {
             if (notation == 1) { //u
-                translate(300, 0);
+                translate(220, 0);
                 rotate(PI / 2);
+
             }
             else if (notation == 2) { //u2
-                translate(300, 300);
+                translate(220, 220);
                 rotate(PI);
+
             }
-            else if (notation == 3) {
-                translate(0, 300);
+            else if (notation == 3) { //u'
+                translate(0, 220);
                 rotate(-PI / 2);
+
             }
         }
 
         function randomAlg() {
-            //while (flag == true) {
-                if (frameCount % 60 == 0) {
-                    background(255, 255, 255);
-                    let rAuf = floor(random(0, 4)) + 1;
-                    let rAlg = floor(random(0, algs.length));
-                    rotation(rAuf);
-                    image(algs[rAlg], 0, 0, 300, 300);
-                    console.log(rAuf);
-                }
-            //}
+
+            if (frameCount % 240 == 0 && indexes<algs.length && On == true) {
+                background(0, 0, 0);
+                let rAuf = floor(random(0, 4)) + 1;
+
+                rotation(rAuf);
+                image(algs[indexes], -40, -40, 300, 300);
+                indexes++;
+            }
+
+        }
+        function randomize() {
+            for (var i=temp.length-1; i>=0; i--) {
+                let rAlg = floor(random(0, temp.length));
+                algs[i] = temp[rAlg];
+                temp.splice(rAlg, 1);
+            }
         }
 
         function mousePressed() {
-            if (!flag) {
-                flag = true;
+            if (hover && !On) {
+                On = true;
+                indexes = 0;
+                for (var i = 0; i < algs.length; i++) {
+                    temp.push(algs[i]);
+                }
+                randomize()
             }
             else {
-                flag = false;
+                On = false;
             }
-            console.log(flag);
+
+            console.log(On);
+            console.log(temp);
+        }
+
+        function button(x, y, s) {
+            rect(x, y, s, s);
+            if (mouseX > x - s / 2 && mouseX < x + s / 2 && mouseY > y - s / 2 && mouseY < y + s / 2) {
+                hover = true;
+            }
+            else {
+                hover = false;
+            }
+
+            text(indexes,width-50,50);
         }
 
 
         function draw() {
             randomAlg();
-
+            button(width - 100, 50, 50);
         }
     </script>
 </head>
 
 <body>
-
 </body>
 
 </html>
