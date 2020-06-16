@@ -78,12 +78,12 @@
         let On = false;
         let indexes = 0;
         let bText = "Start";
+        let prev = false;
 
         function rotation(notation) {
             if (notation == 1) { //u
                 translate(230, 0);
                 rotate(PI / 2);
-
             }
             else if (notation == 2) { //u2
                 translate(230, 230);
@@ -96,16 +96,24 @@
 
             }
         }
-
+        let newAuf;
+        let prevAuf;
         function randomAlg() {
-
             if (frameCount % interval == 0 && indexes < algs.length && On == true) {
                 background(0, 0, 0);
-                let rAuf = floor(random(0, 4)) + 1;
 
-                rotation(rAuf);
+                prevAuf = newAuf;
+                newAuf = floor(random(0, 4)) + 1;
+
+                rotation(newAuf);
                 image(algs[indexes], -35, -35, 300, 300);
+
                 indexes++;
+            }
+            if (prev == true) {
+                indexes--;
+                rotation(prevAuf);
+                image(algs[indexes], -35, -35, 300, 300);
             }
 
         }
@@ -122,22 +130,20 @@
             if (hover && !On) {
                 On = true;
                 indexes = 0;
-                bText = "Stop";
+                bText = "Reset";
                 temp = [];
+                prev = false;
                 for (var i = 0; i < algs.length; i++) {
                     temp.push(algs[i]);
                 }
-                console.log(temp.length);
-                randomize()
+                //console.log(temp.length);
+                randomize();
 
             }
             else {
                 On = false;
                 bText = "Start";
             }
-
-            console.log(On);
-            console.log(temp);
         }
 
         function button(x, y, s) {
@@ -146,10 +152,13 @@
 
             if (mouseX > x - s / 2 && mouseX < x + s / 2 && mouseY > y - s / 2 && mouseY < y + s / 2) {
                 hover = true;
+                cursor(HAND);
             }
             else {
                 hover = false;
+                cursor(ARROW);
             }
+
             textSize(30);
             text(indexes, width - 50, 50);
 
@@ -165,11 +174,20 @@
 
         }
 
+        function keyPressed() {
+            if (keyCode == 32 && indexes > 1 && On == true) {
+                On = false;
+                prev = true;
+            } else if (keyCode == 32 && indexes > 1) {
+                On = true;
+                prev = false;
+            }
+        }
+
 
         function draw() {
             randomAlg();
             button(width - 100, 50, 50);
-            console.log(interval);
             interval = radio.value();
         }
     </script>
