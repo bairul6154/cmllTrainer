@@ -181,9 +181,10 @@
         }
 
         function keyPressed() {
-            if (keyCode == 32 && indexes > 0 && On == true) { //spacebar broadcast to randomalg
+            if (keyCode == 32 && indexes > 1 && On == true) { //spacebar broadcast to randomalg
                 On = false;
                 prev = true;
+                console.log(indexes);
             }
         }
 
