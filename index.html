@@ -21,10 +21,10 @@
             radio.option(' 4 sec', 240);
             radio.option(' 3 sec', 180);
             radio.option(' 2 sec', 120);
-            radio.style('width','60px');
-            radio.style('color','White');
-            radio.position(width-100, 100);
-            radio.value(300);
+            radio.style('width', '60px');
+            radio.style('color', 'White');
+            radio.position(width - 115, 100);
+            radio.value(120);
         }
         var interval;
         let algs = [];
@@ -77,6 +77,7 @@
         let hover = false;
         let On = false;
         let indexes = 0;
+        let Aufs = [];
         let bText = "Start";
         let prev = false;
 
@@ -88,37 +89,40 @@
             else if (notation == 2) { //u2
                 translate(230, 230);
                 rotate(PI);
-
             }
             else if (notation == 3) { //u'
                 translate(0, 230);
                 rotate(-PI / 2);
-
             }
         }
-        let newAuf;
-        let prevAuf;
+
         function randomAlg() {
-            if (frameCount % interval == 0 && indexes < algs.length && On == true) {
+            if (frameCount % interval == 0 && indexes < algs.length && On == true) {//when the interval is met, increment index and then
                 background(0, 0, 0);
-
-                prevAuf = newAuf;
-                newAuf = floor(random(0, 4)) + 1;
-
-                rotation(newAuf);
-                image(algs[indexes], -35, -35, 300, 300);
-
                 indexes++;
+
+                Aufs[indexes - 1] = floor(random(0, 4)) + 1;//generates a random auf
+
+                rotation(Aufs[indexes - 1]);//rotates it
+                image(algs[indexes - 1], -35, -35, 300, 300);
+
+                //console.log(Aufs);
             }
-            if (prev == true) {
+            if (prev == true) {//show previous case
+                background(0, 0, 0);
                 indexes--;
-                rotation(prevAuf);
-                image(algs[indexes], -35, -35, 300, 300);
+
+                rotation(Aufs[indexes - 1]);
+                image(algs[indexes - 1], -35, -35, 300, 300);
+
+                prev = false;
+                On = true;
+                //console.log(Aufs);
             }
 
         }
 
-        function randomize() {
+        function randomize() { //randomizes the alg array
             for (var i = temp.length - 1; i >= 0; i--) {
                 let rAlg = floor(random(0, temp.length));
                 algs[i] = temp[rAlg];
@@ -127,20 +131,22 @@
         }
 
         function mousePressed() {
-            if (hover && !On) {
+            //button's broadcast
+            if (hover && !On) { //resets the variables and arrays
+                background(0, 0, 0);
                 On = true;
                 indexes = 0;
                 bText = "Reset";
                 temp = [];
                 prev = false;
+                Aufs = [];
                 for (var i = 0; i < algs.length; i++) {
                     temp.push(algs[i]);
                 }
-                //console.log(temp.length);
                 randomize();
 
             }
-            else {
+            else if (hover) {
                 On = false;
                 bText = "Start";
             }
@@ -149,20 +155,20 @@
         function button(x, y, s) {
             fill(255, 255, 255);
             rect(x, y, s, s);
-
+            //changes mouse
             if (mouseX > x - s / 2 && mouseX < x + s / 2 && mouseY > y - s / 2 && mouseY < y + s / 2) {
-                hover = true;
+                hover = true; //broadcast to mousePressed
                 cursor(HAND);
             }
             else {
-                hover = false;
+                hover = false; //same here
                 cursor(ARROW);
             }
 
             textSize(30);
             text(indexes, width - 50, 50);
 
-            textSize(20);
+            textSize(17);
             if (bText == "Start") {
                 fill(0, 255, 0);
                 text(bText, x, y);
@@ -175,12 +181,9 @@
         }
 
         function keyPressed() {
-            if (keyCode == 32 && indexes > 1 && On == true) {
+            if (keyCode == 32 && indexes > 0 && On == true) { //spacebar broadcast to randomalg
                 On = false;
                 prev = true;
-            } else if (keyCode == 32 && indexes > 1) {
-                On = true;
-                prev = false;
             }
         }
 
