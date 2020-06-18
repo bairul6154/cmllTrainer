@@ -188,24 +188,28 @@
                 bText = "Start";
             }
         }
-
+        let color = "White";
         function button(x, y, s) {
-            fill(255, 255, 255);
-            rect(x, y, s, s);
+
+            fill(color);
+            rect(x, y, s, s, 10);
             //changes mouse
             if (mouseX > x - s / 2 && mouseX < x + s / 2 && mouseY > y - s / 2 && mouseY < y + s / 2) {
                 hover = true; //broadcast to mousePressed
                 cursor(HAND);
+                color = "Gray";
             }
             else {
                 hover = false; //same here
                 cursor(ARROW);
+                color = "White";
             }
-
+            fill("White");
             textSize(30);
             text(indexes, width - 50, 50);
 
             textSize(17);
+            text("'Space' to go back \nto previous cases", width-100, height/2);
             if (bText == "Start") {
                 fill(0, 255, 0);
                 text(bText, x, y);
@@ -233,6 +237,7 @@
             interval = radio.value();
             side = sideSelect.value();
             //console.log(side);
+
         }
     </script>
 </head>
