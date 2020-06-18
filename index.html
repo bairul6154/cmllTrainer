@@ -9,6 +9,7 @@
     </script>
     <script <script>
         let radio;
+        let sideSelect;
 
         function setup() {
             createCanvas(800, 600);
@@ -25,8 +26,17 @@
             radio.style('color', 'White');
             radio.position(width - 115, 100);
             radio.value(120);
+
+            sideSelect = createRadio();
+            sideSelect.option(' 3 sided', 3);
+            sideSelect.option(' 2 sided', 2);
+            sideSelect.style('width', '90px');
+            sideSelect.style('color', 'White');
+            sideSelect.position(width - 115, 220);
+            sideSelect.value(2);
         }
-        var interval;
+        let interval;
+        let side;
         let algs = [];
 
         function preload() {
@@ -82,38 +92,65 @@
         let prev = false;
 
         function rotation(notation) {
-            if (notation == 1) { //u
-                translate(230, 0);
-                rotate(PI / 2);
+            if (side == 2) {
+                if (notation == 1) { //u
+                    translate(230, 0);
+                    rotate(PI / 2);
+                }
+                else if (notation == 2) { //u2
+                    translate(230, 230);
+                    rotate(PI);
+                }
+                else if (notation == 3) { //u'
+                    translate(0, 230);
+                    rotate(-PI / 2);
+                }
             }
-            else if (notation == 2) { //u2
-                translate(230, 230);
-                rotate(PI);
-            }
-            else if (notation == 3) { //u'
-                translate(0, 230);
-                rotate(-PI / 2);
+            else if (side == 3) {
+                if (notation == 1) { //u
+                    translate(265, -35);
+                    rotate(PI / 2);
+                }
+                else if (notation == 2) { //u2
+                    translate(300, 230);
+                    rotate(PI);
+                }
+                else if (notation == 3) { //u'
+                    translate(35, 265);
+                    rotate(-PI / 2);
+                }
             }
         }
 
         function randomAlg() {
-            if (frameCount % interval == 0 && indexes < algs.length && On == true) {//when the interval is met, increment index and then
+            if (frameCount % interval == 0 && indexes < algs.length && On == true) { //when the interval is met, increment index and then
                 background(0, 0, 0);
                 indexes++;
 
-                Aufs[indexes - 1] = floor(random(0, 4)) + 1;//generates a random auf
+                Aufs[indexes - 1] = floor(random(0, 4)) + 1; //generates a random auf
 
-                rotation(Aufs[indexes - 1]);//rotates it
-                image(algs[indexes - 1], -35, -35, 300, 300);
+                rotation(Aufs[indexes - 1]); //rotates it
+
+                if (side == 2) {
+                    image(algs[indexes - 1], -35, -35, 300, 300);
+                }
+                else if (side == 3) {
+                    image(algs[indexes - 1], 0, -35, 300, 300);
+                }
 
                 //console.log(Aufs);
             }
-            if (prev == true) {//show previous case
+            if (prev == true) { //show previous case
                 background(0, 0, 0);
                 indexes--;
 
                 rotation(Aufs[indexes - 1]);
-                image(algs[indexes - 1], -35, -35, 300, 300);
+                if (side == 2) {
+                    image(algs[indexes - 1], -35, -35, 300, 300);
+                }
+                else if (side == 3) {
+                    image(algs[indexes - 1], 0, -35, 300, 300);
+                }
 
                 prev = false;
                 On = true;
@@ -184,7 +221,7 @@
             if (keyCode == 32 && indexes > 1 && On == true) { //spacebar broadcast to randomalg
                 On = false;
                 prev = true;
-                console.log(indexes);
+                //console.log(indexes);
             }
         }
 
@@ -192,7 +229,10 @@
         function draw() {
             randomAlg();
             button(width - 100, 50, 50);
+
             interval = radio.value();
+            side = sideSelect.value();
+            //console.log(side);
         }
     </script>
 </head>
