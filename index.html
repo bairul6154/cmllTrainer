@@ -169,7 +169,7 @@
 
         function mousePressed() {
             //button's broadcast
-            if (hover && !On) { //resets the variables and arrays
+            if (hover && On == false) { //resets the variables and arrays
                 background(0, 0, 0);
                 On = true;
                 indexes = 0;
@@ -183,9 +183,11 @@
                 randomize();
 
             }
-            else if (hover) {
+            else if (hover && On == true) {
+                background(0, 0, 0);
                 On = false;
                 bText = "Start";
+                indexes = 0;
             }
         }
         let color = "White";
@@ -208,8 +210,9 @@
             textSize(30);
             text(indexes, width - 50, 50);
 
-            textSize(17);
-            text("'Space' to go back \nto previous cases", width-100, height/2);
+            textSize(15);
+            text("'Backspace' to go back\nto previous cases", width-100, height/2);
+            text("'Spacebar' to\npause / unpause", width-100, height/2+60);
             if (bText == "Start") {
                 fill(0, 255, 0);
                 text(bText, x, y);
@@ -222,10 +225,15 @@
         }
 
         function keyPressed() {
-            if (keyCode == 32 && indexes > 1 && On == true) { //spacebar broadcast to randomalg
+            if (keyCode == BACKSPACE && indexes > 1 && On == true) { //backspace broadcast to randomalg to show prev
                 On = false;
                 prev = true;
                 //console.log(indexes);
+            }
+            if (keyCode == 32 && On == true) { //spacebar to pause / unpause
+                On = false;
+            } else if (keyCode == 32 && indexes > 0) {
+                On = true;
             }
         }
 
