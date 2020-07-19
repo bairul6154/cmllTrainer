@@ -7,9 +7,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.1/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/addons/p5.dom.min.js">
     </script>
-    <script <script>
-        let radio;
+    <script>
+        let secSelect;
         let sideSelect;
+        let caseSelect = [8];
 
         function setup() {
             createCanvas(800, 600);
@@ -17,72 +18,57 @@
             textAlign(CENTER, CENTER);
             strokeWeight(5);
             background(0, 0, 0);
-            radio = createRadio();
-            radio.option(' 5 sec', 300);
-            radio.option(' 4 sec', 240);
-            radio.option(' 3 sec', 180);
-            radio.option(' 2 sec', 120);
-            radio.style('width', '60px');
-            radio.style('color', 'White');
-            radio.position(width - 115, 100);
-            radio.value(120);
+
+            secSelect = createSelect();
+            secSelect.option(' 5 sec', 300);
+            secSelect.option(' 4 sec', 240);
+            secSelect.option(' 3.5 sec', 210);
+            secSelect.option(' 3 sec', 180);
+            secSelect.option(' 2.5 sec', 150);
+            secSelect.option(' 2 sec', 120);
+            secSelect.option(' 1.5 sec', 90);
+            secSelect.style('width', '60px');
+            secSelect.style('color', 'Black');
+            secSelect.position(width - 115, 100);
+            secSelect.value(90);
 
             sideSelect = createRadio();
             sideSelect.option(' 3 sided', 3);
             sideSelect.option(' 2 sided', 2);
             sideSelect.style('width', '90px');
             sideSelect.style('color', 'White');
-            sideSelect.position(width - 115, 220);
+            sideSelect.position(width - 120, 140);
             sideSelect.value(2);
+
+            caseSelect[0] = createCheckbox(' O');
+            caseSelect[1] = createCheckbox(' H');
+            caseSelect[2] = createCheckbox(' Pi');
+            caseSelect[3] = createCheckbox(' U');
+            caseSelect[4] = createCheckbox(' T');
+            caseSelect[5] = createCheckbox(' S');
+            caseSelect[6] = createCheckbox(' AS');
+            caseSelect[7] = createCheckbox(' L');
+
+            caseSelect[0].changed(caseO);
+            // caseSelect[1].changed(caseH);
+            // caseSelect[2].changed(casePi);
+            // caseSelect[3].changed(caseU);
+            // caseSelect[4].changed(caseT);
+            // caseSelect[5].changed(caseS);
+            // caseSelect[6].changed(caseAS);
+            // caseSelect[7].changed(caseL);
+
+            for (var i = 0; i < caseSelect.length; i++) {
+                caseSelect[i].changed(caseChange);
+                caseSelect[i].position(30 + i * 50, height - 80);
+                caseSelect[i].style('color', 'White');
+                caseSelect[i].checked(true);
+            }
         }
         let interval;
         let side;
         let algs = [];
 
-        function preload() {
-            algs.push(loadImage('algs/alg1.png'));
-            algs.push(loadImage('algs/alg2.png'));
-            algs.push(loadImage('algs/alg3.png'));
-            algs.push(loadImage('algs/alg4.png'));
-            algs.push(loadImage('algs/alg5.png'));
-            algs.push(loadImage('algs/alg6.png'));
-            algs.push(loadImage('algs/alg7.png'));
-            algs.push(loadImage('algs/alg8.png'));
-            algs.push(loadImage('algs/alg9.png'));
-            algs.push(loadImage('algs/alg10.png'));
-            algs.push(loadImage('algs/alg11.png'));
-            algs.push(loadImage('algs/alg12.png'));
-            algs.push(loadImage('algs/alg13.png'));
-            algs.push(loadImage('algs/alg14.png'));
-            algs.push(loadImage('algs/alg15.png'));
-            algs.push(loadImage('algs/alg16.png'));
-            algs.push(loadImage('algs/alg17.png'));
-            algs.push(loadImage('algs/alg18.png'));
-            algs.push(loadImage('algs/alg19.png'));
-            algs.push(loadImage('algs/alg20.png'));
-            algs.push(loadImage('algs/alg21.png'));
-            algs.push(loadImage('algs/alg22.png'));
-            algs.push(loadImage('algs/alg23.png'));
-            algs.push(loadImage('algs/alg24.png'));
-            algs.push(loadImage('algs/alg25.png'));
-            algs.push(loadImage('algs/alg26.png'));
-            algs.push(loadImage('algs/alg27.png'));
-            algs.push(loadImage('algs/alg28.png'));
-            algs.push(loadImage('algs/alg29.png'));
-            algs.push(loadImage('algs/alg30.png'));
-            algs.push(loadImage('algs/alg31.png'));
-            algs.push(loadImage('algs/alg32.png'));
-            algs.push(loadImage('algs/alg33.png'));
-            algs.push(loadImage('algs/alg34.png'));
-            algs.push(loadImage('algs/alg35.png'));
-            algs.push(loadImage('algs/alg36.png'));
-            algs.push(loadImage('algs/alg37.png'));
-            algs.push(loadImage('algs/alg38.png'));
-            algs.push(loadImage('algs/alg39.png'));
-            algs.push(loadImage('algs/alg40.png'));
-            algs.push(loadImage('algs/alg41.png'));
-            algs.push(loadImage('algs/alg42.png'));
-        }
         let temp = [];
         let hover = false;
         let On = false;
@@ -90,6 +76,107 @@
         let Aufs = [];
         let bText = "Start";
         let prev = false;
+
+        function caseO() {
+            if (caseSelect[0].checked()) {
+                algs.push(loadImage('algs/alg1.png'));
+                algs.push(loadImage('algs/alg2.png'));
+            }
+        }
+
+        function caseH() {
+            if (caseSelect[1].checked()) {
+                algs.push(loadImage('algs/alg3.png'));
+                algs.push(loadImage('algs/alg4.png'));
+                algs.push(loadImage('algs/alg5.png'));
+                algs.push(loadImage('algs/alg6.png'));
+                //console.log(1);
+            }
+        }
+
+        function casePi() {
+            if (caseSelect[2].checked()) {
+                algs.push(loadImage('algs/alg7.png'));
+                algs.push(loadImage('algs/alg8.png'));
+                algs.push(loadImage('algs/alg9.png'));
+                algs.push(loadImage('algs/alg10.png'));
+                algs.push(loadImage('algs/alg11.png'));
+                algs.push(loadImage('algs/alg12.png'));
+            }
+
+        }
+
+        function caseU() {
+            if (caseSelect[3].checked()) {
+                algs.push(loadImage('algs/alg13.png'));
+                algs.push(loadImage('algs/alg14.png'));
+                algs.push(loadImage('algs/alg15.png'));
+                algs.push(loadImage('algs/alg16.png'));
+                algs.push(loadImage('algs/alg17.png'));
+                algs.push(loadImage('algs/alg18.png'));
+            }
+
+        }
+
+        function caseT() {
+            if (caseSelect[4].checked()) {
+                algs.push(loadImage('algs/alg19.png'));
+                algs.push(loadImage('algs/alg20.png'));
+                algs.push(loadImage('algs/alg21.png'));
+                algs.push(loadImage('algs/alg22.png'));
+                algs.push(loadImage('algs/alg23.png'));
+                algs.push(loadImage('algs/alg24.png'));
+            }
+
+        }
+
+        function caseS() {
+            if (caseSelect[5].checked()) {
+                algs.push(loadImage('algs/alg25.png'));
+                algs.push(loadImage('algs/alg26.png'));
+                algs.push(loadImage('algs/alg27.png'));
+                algs.push(loadImage('algs/alg28.png'));
+                algs.push(loadImage('algs/alg29.png'));
+                algs.push(loadImage('algs/alg30.png'));
+            }
+
+        }
+
+        function caseAS() {
+            if (caseSelect[6].checked()) {
+                algs.push(loadImage('algs/alg31.png'));
+                algs.push(loadImage('algs/alg32.png'));
+                algs.push(loadImage('algs/alg33.png'));
+                algs.push(loadImage('algs/alg34.png'));
+                algs.push(loadImage('algs/alg35.png'));
+                algs.push(loadImage('algs/alg36.png'));
+            }
+
+        }
+
+        function caseL() {
+            if (caseSelect[7].checked()) {
+                algs.push(loadImage('algs/alg37.png'));
+                algs.push(loadImage('algs/alg38.png'));
+                algs.push(loadImage('algs/alg39.png'));
+                algs.push(loadImage('algs/alg40.png'));
+                algs.push(loadImage('algs/alg41.png'));
+                algs.push(loadImage('algs/alg42.png'));
+            }
+        }
+
+        function caseChange() {
+            algs = [];
+            caseO();
+            caseH();
+            casePi();
+            caseU();
+            caseT();
+            caseS();
+            caseAS();
+            caseL();
+
+        }
 
         function rotation(notation) {
             if (side == 2) {
@@ -160,27 +247,37 @@
         }
 
         function randomize() { //randomizes the alg array
+            for (var i = 0; i < algs.length; i++) {
+                temp.push(algs[i]);
+            }
             for (var i = temp.length - 1; i >= 0; i--) {
                 let rAlg = floor(random(0, temp.length));
                 algs[i] = temp[rAlg];
                 temp.splice(rAlg, 1);
             }
+
         }
+        let once = true;
 
         function mousePressed() {
+
             //button's broadcast
             if (hover && On == false) { //resets the variables and arrays
+                if (once) {
+                    once = false;
+                    caseChange();
+                }
                 background(0, 0, 0);
                 On = true;
                 indexes = 0;
                 bText = "Reset";
                 temp = [];
+                tempImgIndexes = [];
                 prev = false;
                 Aufs = [];
-                for (var i = 0; i < algs.length; i++) {
-                    temp.push(algs[i]);
-                }
+
                 randomize();
+                //console.log(algs[0]);
 
             }
             else if (hover && On == true) {
@@ -191,6 +288,7 @@
             }
         }
         let color = "White";
+
         function button(x, y, s) {
 
             fill(color);
@@ -211,8 +309,8 @@
             text(indexes, width - 50, 50);
 
             textSize(15);
-            text("'Backspace' to go back\nto previous cases", width-100, height/2);
-            text("'Spacebar' to\npause / unpause", width-100, height/2+60);
+            text("'Backspace' to go back\nto previous cases", width - 100, height / 2 - 60);
+            text("'Spacebar' to\npause / unpause", width - 100, height / 2);
             if (bText == "Start") {
                 fill(0, 255, 0);
                 text(bText, x, y);
@@ -232,7 +330,8 @@
             }
             if (keyCode == 32 && On == true) { //spacebar to pause / unpause
                 On = false;
-            } else if (keyCode == 32 && indexes > 0) {
+            }
+            else if (keyCode == 32 && indexes > 0) {
                 On = true;
             }
         }
@@ -242,9 +341,9 @@
             randomAlg();
             button(width - 100, 50, 50);
 
-            interval = radio.value();
+            interval = secSelect.value();
             side = sideSelect.value();
-            //console.log(side);
+            //console.log(algs[indexes]);
 
         }
     </script>
